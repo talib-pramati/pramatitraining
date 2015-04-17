@@ -1,0 +1,25 @@
+package test;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+public class readTable {
+	
+	public static void main(String[] args) throws IOException
+	{
+		File input = new File("/home/taliba/pramatitraining");
+		Document doc = Jsoup.parse(input, "UTF-8", "http://mail-archives.apache.org/mod_mbox/maven-users/");
+
+		Elements link = doc.select("a");
+		
+		System.out.println();
+        String href = link.attr("href");
+        System.out.println("Title: " + link.text());
+        System.out.println("Url: " + href);
+	}
+
+}

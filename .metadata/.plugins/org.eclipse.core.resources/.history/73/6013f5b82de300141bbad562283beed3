@@ -1,0 +1,60 @@
+package test;
+
+
+import java.util.List;
+import java.util.ArrayList;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+
+public class readTable {
+	
+	public static void main(String[] args) throws Exception
+	{
+		/*File input = new File("/home/taliba/pramatitraining/parsedData");
+		Document doc = Jsoup.parse(input, "UTF-8", "http://mail-archives.apache.org/mod_mbox/maven-users/");
+
+		Elements link = doc.select("a");
+		
+		System.out.println();
+        String href = link.attr("href");
+        System.out.println("Title: " + link.text());
+        System.out.println("Url: " + href);*/
+		
+		String site = "http://mail-archives.apache.org/mod_mbox/maven-users/";
+        List<String> links = LinkExtractor.extractLinks(site);
+        for (String link : links) {
+       System.out.println(link);
+        }
+
+
+
+
+	}
+
+}
+
+ class LinkExtractor
+{
+
+ public static List<String>extractLinks(String url) throws Exception {
+   final ArrayList<String> result = new ArrayList<String>();
+
+   Document doc = Jsoup.connect(url).get();
+
+   Elements links = doc.select("a[href*2014*]");
+
+   for (Element link : links) {
+     result.add(link.attr("abs:href"));
+   
+   }
+
+   return result;
+ }
+}
+
+
+

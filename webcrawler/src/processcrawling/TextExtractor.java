@@ -1,0 +1,44 @@
+package processcrawling;
+
+import java.io.IOException;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+public class TextExtractor implements Runnable{
+	
+	private WebCrawler webCrawler;
+	TextExtractor(WebCrawler webCrawler)
+	{
+		this.webCrawler = webCrawler;
+	}
+	
+	@Override
+	public void run()
+	{
+		if(!webCrawler.getPagesContainingNoLink().isEmpty())
+		{
+			String url = webCrawler.getPagesContainingNoLink().poll();
+			try {
+				Document doc = Jsoup.connect(url).get();
+				Element text = doc.body();
+				
+				System.out.println(text.text());
+				saveMail(text.text());
+			} catch (IOException e) {
+				System.out.println("This mail could not saved");
+			}
+			
+			webCrawler.newTextExtractorThread();
+		}
+		
+	}
+	
+	
+	public void saveMail(String file)
+	{
+		
+	}
+
+}

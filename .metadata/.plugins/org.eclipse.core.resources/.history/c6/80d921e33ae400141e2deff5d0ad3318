@@ -1,0 +1,59 @@
+package processcrawling;
+
+import java.io.IOException;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+public class LinkExtractor implements Runnable{
+
+	private String url;
+	private WebCrawler webCrawler;
+	LinkExtractor(String url, WebCrawler webCrawler)
+	{
+		this.url = url;
+		this.webCrawler = webCrawler;
+	}
+	
+	@Override
+	public void run() {
+		
+		try {
+			extractURLS();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			
+			System.out.println(url+ ", This url is unreachable");
+			e.printStackTrace();
+		}
+		
+	}
+
+	public void extractURLS() throws IOException {
+		
+		Document document = Jsoup.connect(url).get();
+		Elements urls = document.select("a[href]");
+		
+		if(urls.isEmpty())
+		{
+			//create new thread to extract the text
+			//and save it into new file
+		}
+		
+		for(Element url:urls)
+		{
+			if(!webCrawler.isContainsURL(url.toString()))
+			{
+				webCrawler.enqueURL(url.toString());		
+			}
+				
+		}
+		
+		webCrawler.getVisitedLinks().add(url.toString());
+		
+	}
+
+}
