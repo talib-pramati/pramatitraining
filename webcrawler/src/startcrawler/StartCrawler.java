@@ -8,7 +8,9 @@ public class StartCrawler {
 	
 	public static void main(String[] args)
 	{
-		new WebCrawler(ConstantClass.site,ConstantClass.maximum_threads).startCrawling();
+		WebCrawler webCrawler = new WebCrawler(ConstantClass.SITE,ConstantClass.MAXIMUM_THREADS);
+		webCrawler.startCrawling();
+		webCrawler.shutDownExecutorService();
 	}
 
 }

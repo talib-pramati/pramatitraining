@@ -1,9 +1,13 @@
 package processcrawling;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -14,6 +18,8 @@ public class WebCrawler implements WebCrwalerInterface{
 	private final Queue<String> uniqueExtractedURLS = new ConcurrentLinkedQueue<String>();
 	
 	private final Queue<String> pagesContainingNoLink = new ConcurrentLinkedQueue<String>();
+	
+	private final HandleFile handleFile = new HandleFile();
 	private ExecutorService executor;
 	private String url;
 	
@@ -66,7 +72,7 @@ public class WebCrawler implements WebCrwalerInterface{
 	
 	public void startTextExtractorThread()
 	{
-		executor.execute(new TextExtractor(this));
+		executor.execute(new TextExtractor(this,handleFile));
 	}
 
 	@Override
@@ -86,6 +92,18 @@ public class WebCrawler implements WebCrwalerInterface{
 		return this.visitedLinks;
 	}
 
-	
+	public void shutDownExecutorService()
+	{
+		if(uniqueExtractedURLS.isEmpty() && pagesContainingNoLink.isEmpty())
+		{
+			List<Runnable> shutdownNow = executor.shutdownNow();
+			Iterator<Runnable> iterator = shutdownNow.iterator();
+			
+			while(iterator.hasNext())
+			{
+				System.out.println("This thread class running" + iterator.next().getClass());
+			}
+		}
+	}
 
 }

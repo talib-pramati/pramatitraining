@@ -1,0 +1,45 @@
+package test;
+
+import java.io.File;
+
+public class TestingFile {
+	
+	public static void main(String[] args)
+	{
+		boolean dirFlag = false;
+		boolean fileFlag = false;
+		File dir = new File("C//mails");
+		File file = new File("C//mails/file.text");
+		
+		try
+		{
+			dirFlag = dir.mkdir();
+			if(!dirFlag)
+			{
+				try
+				{
+					fileFlag = file.createNewFile();
+				}
+				
+				catch(Exception exc)
+				{
+					System.out.println("File can not be created");
+				}
+				
+				System.out.println("file = " + file.getAbsolutePath());
+			}
+		}
+		
+		catch(Exception exc)
+		{
+			exc.printStackTrace();
+		}
+		
+		if(!dirFlag)
+		
+		System.out.println(dir.getAbsolutePath());
+		
+		
+	}
+
+}

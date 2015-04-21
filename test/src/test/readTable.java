@@ -27,11 +27,13 @@ public class readTable {
 		
 		String site = "http://mail-archives.apache.org/mod_mbox/maven-users/201412.mbox/raw/%3C547C1A5F.7070709%40uni-jena.de%3E";
         List<String> links = LinkExtractor.extractLinks(site);
+        System.out.println("printing links...");
         for (String link : links) {
        System.out.println(link);
         }
         
-       String childLink ="http://mail-archives.apache.org/mod_mbox/maven-users/201412.mbox/raw/%3C547C1A5F.7070709%40uni-jena.de%3E";
+       System.out.println("\n\n\nprinting text");
+        String childLink ="http://mail-archives.apache.org/mod_mbox/maven-users/201412.mbox/raw/%3C547C1A5F.7070709%40uni-jena.de%3E";
        TextExtractor.extractText(childLink);
        //LinkExtractor.extractLinks(childLink);
 

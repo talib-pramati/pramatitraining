@@ -1,0 +1,11 @@
+package processcrawling;
+
+public interface HandleFile {
+	
+	public void creataeFile();
+	
+	public void generateUniqueFileName();
+	
+	public void writeIntoFile(String fileName,String text);
+
+}

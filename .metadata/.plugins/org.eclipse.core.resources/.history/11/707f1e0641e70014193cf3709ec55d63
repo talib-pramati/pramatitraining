@@ -1,0 +1,13 @@
+package processcrawling;
+
+import java.io.IOException;
+
+public interface HandleFileInterface {
+	
+	public void creataeFile()  throws IOException ;
+	
+	public String generateUniqueFileName();
+	
+	public void writeIntoFile(String fileName,String text);
+
+}

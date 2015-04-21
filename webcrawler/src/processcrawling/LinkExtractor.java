@@ -11,6 +11,7 @@ public class LinkExtractor implements Runnable{
 
 	
 	private WebCrawler webCrawler;
+	
 	LinkExtractor(WebCrawler webCrawler)
 	{
 		
@@ -20,17 +21,22 @@ public class LinkExtractor implements Runnable{
 	@Override
 	public void run() {
 		
-		String url = webCrawler.getUniqueExtractedURLS().poll();
-		try {
+		if(!webCrawler.getUniqueExtractedURLS().isEmpty()){
 			
-			extractURLS(url);
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			
-			System.out.println(url+ ", This url is unreachable");
-			e.printStackTrace();
+			System.out.println("link size = "+ webCrawler.getUniqueExtractedURLS().size());
+			System.out.println("mail size = "+ webCrawler.getPagesContainingNoLink().size());
+			String url = webCrawler.getUniqueExtractedURLS().poll();
+			try {
+				
+				extractURLS(url);
+				
+			} catch (IOException e) {
+								
+				System.out.println(url+ ", This url is unreachable");
+				e.printStackTrace();
+			}
 		}
+		
 		
 	}
 
@@ -39,25 +45,30 @@ public class LinkExtractor implements Runnable{
 		
 		Document document = Jsoup.connect(url).get();
 		Elements urls = document.select("a[href]");
+		webCrawler.getVisitedLinks().add(url);
 		
 		if(urls.isEmpty())
 		{
+			System.out.println("Calling link extractor...");
 			webCrawler.getPagesContainingNoLink().offer(url);
 			webCrawler.startTextExtractorThread();
-			//think to create new 
+			
 		}
 		
-		for(Element element:urls)
-		{
-			if(!webCrawler.isContainsURL(element.toString()))
+		else
+		{	for(Element element:urls)
 			{
-				webCrawler.getUniqueExtractedURLS().offer(element.attr("abs:href"));	
+				if(!webCrawler.isContainsURL(element.toString()))
+				{
+					webCrawler.getUniqueExtractedURLS().offer(element.attr("abs:href"));
+					webCrawler.newLinkExtractorThread();
+				}
+					
 			}
-				
 		}
 		
-		webCrawler.newLinkExtractorThread();
 		webCrawler.getVisitedLinks().add(url);
+		//webCrawler.newLinkExtractorThread();
 		
 	}
 

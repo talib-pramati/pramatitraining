@@ -6,8 +6,16 @@
 <fullyQualifiedTypeName name="java.util.concurrent.ExecutorService"/>
 <fullyQualifiedTypeName name="java.util.concurrent.Executor"/>
 <fullyQualifiedTypeName name="java.util.concurrent.Executors"/>
-<fullyQualifiedTypeName name="constantclassess.ConstantClass"/>
 <fullyQualifiedTypeName name="org.jsoup.Jsoup"/>
 <fullyQualifiedTypeName name="org.jsoup.nodes.Element"/>
 <fullyQualifiedTypeName name="java.util.Queue"/>
+<fullyQualifiedTypeName name="java.util.Date"/>
+<fullyQualifiedTypeName name="java.util.Random"/>
+<fullyQualifiedTypeName name="java.nio.charset.Charset"/>
+<fullyQualifiedTypeName name="java.io.BufferedWriter"/>
+<fullyQualifiedTypeName name="java.nio.file.Paths"/>
+<fullyQualifiedTypeName name="processcrawling.HandleFileInterface"/>
+<fullyQualifiedTypeName name="constantclassess.ConstantClass"/>
+<fullyQualifiedTypeName name="java.io.File"/>
+<fullyQualifiedTypeName name="processcrawling.HandleFile"/>
 </qualifiedTypeNameHistroy>

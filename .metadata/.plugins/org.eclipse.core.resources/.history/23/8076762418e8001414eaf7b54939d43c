@@ -1,0 +1,76 @@
+package main;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+public class CompareTwoFiles {
+	
+	public static void main(String args[])
+	{
+		String path1 = "/home/taliba/Desktop/pramatitraining/CompareTwoFiles/Files/File1.txt";
+		String path2 = "/home/taliba/Desktop/pramatitraining/CompareTwoFiles/Files/File2.txt";
+		
+		
+		Set<String> contentOfFirstFile = new HashSet<String>();
+		contentOfFirstFile = readFile(path1,contentOfFirstFile);
+		
+		Set<String> contentOfSecondFile = new HashSet<String>();
+		contentOfSecondFile = readFile(path2,contentOfSecondFile);
+		
+		List<String> commonData = new ArrayList<String>();
+		
+		commonData = compareContentofFile(contentOfFirstFile,contentOfSecondFile);
+		
+		for(String str: commonData)
+		{
+			System.out.println(str);
+		}
+		
+		
+	}
+
+	private static List<String> compareContentofFile(
+			Set<String> contentOfFirstFile, Set<String> contentOfSecondFile) {
+		
+		List<String> list = new ArrayList<String>();
+		Iterator<String> iterator = contentOfFirstFile.iterator();
+		
+		while(iterator.hasNext())
+		{
+			String next = iterator.next();
+			
+			if(contentOfSecondFile.contains(next))
+				list.add(next);
+				
+		}
+		
+		return list;
+	}
+
+	private static Set<String> readFile(String path1,
+			Set<String> contentFile) {
+		
+		
+		try (BufferedReader br = new BufferedReader(new FileReader(path1)))
+		{
+ 
+			String sCurrentLine;
+ 
+			while ((sCurrentLine = br.readLine()) != null) {
+				
+				contentFile.add(sCurrentLine.toUpperCase());
+			}
+ 
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+		return null;
+	}
+
+}

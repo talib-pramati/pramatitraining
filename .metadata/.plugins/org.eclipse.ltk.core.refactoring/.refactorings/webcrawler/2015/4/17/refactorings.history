@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;processcrawling.HandleFile&apos; to &apos;HandleFileInterface&apos;&#x0A;- Original project: &apos;webcrawler&apos;&#x0A;- Original element: &apos;processcrawling.HandleFile&apos;&#x0A;- Renamed element: &apos;processcrawling.HandleFileInterface&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;HandleFile&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;processcrawling{HandleFile.java[HandleFile" matchStrategy="1" name="HandleFileInterface" qualified="false" references="true" similarDeclarations="false" stamp="1429521808944" textual="false" version="1.0"/>
+</session>

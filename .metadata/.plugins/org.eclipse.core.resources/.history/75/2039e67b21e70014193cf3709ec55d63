@@ -1,0 +1,29 @@
+package test;
+
+import java.io.File;
+
+public class TestingFile {
+	
+	public static void main(String[] args)
+	{
+		boolean dirFlag = false;
+		File file = new File("C://mails");
+		
+		try
+		{
+			dirFlag = file.mkdir();
+		}
+		
+		catch(Exception exc)
+		{
+			exc.printStackTrace();
+		}
+		
+		if(dirFlag)
+		
+		System.out.println(file.getAbsolutePath());
+		
+		
+	}
+
+}
