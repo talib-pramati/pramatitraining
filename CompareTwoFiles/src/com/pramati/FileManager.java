@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class FileManager implements FileManagerInterface {
 
-	public void writeIntoTheFile(Set<String> commonData, String outPutFilePath) {
+	public void writeIntoTheFile(Set<String> partiallyMatchedData, String outPutFilePath) {
 
 		try {
 
@@ -25,7 +25,7 @@ public class FileManager implements FileManagerInterface {
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
 
-			for (String str : commonData) {
+			for (String str : partiallyMatchedData) {
 				bw.write(str + "\n");
 			}
 			
