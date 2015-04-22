@@ -1,4 +1,4 @@
-package main;
+package com.pramati;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -6,18 +6,17 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 public class FileManager implements FileManagerInterface {
 
-	public void writeIntoTheFile(List<String> commonData) {
+	public void writeIntoTheFile(Set<String> commonData, String outPutFilePath) {
 
 		try {
 
-			File file = new File("Files/result.txt");
+			File file = new File(outPutFilePath);
 
 			if (!file.exists()) {
 				file.createNewFile();
@@ -29,39 +28,43 @@ public class FileManager implements FileManagerInterface {
 			for (String str : commonData) {
 				bw.write(str + "\n");
 			}
-			bw.close();
-
+			
+								
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+			
 	}
 
-	public List<String> compareContentofFile(Set<String> contentOfFirstFile,
+	public Set<String> findPartiallyMatchedData(Set<String> contentOfFirstFile,
 			Set<String> contentOfSecondFile) {
 
-		List<String> list = new ArrayList<String>();
+		Set<String> partiallyMatchedData = new HashSet<String>();
 		Iterator<String> secondSetIterator = contentOfSecondFile.iterator();
 
 		while (secondSetIterator.hasNext()) {
 			String nameInSecondFile = secondSetIterator.next();
-			String[] split = nameInSecondFile.split(" ");
-			String firstName = split[0];
-			String lastName = split[split.length - 1];
+			String[] nameArray = nameInSecondFile.split(" ");
+			String firstName = nameArray[0];
+			String lastName = nameArray[nameArray.length - 1];
 			Iterator<String> firstSetIterator = contentOfFirstFile.iterator();
 			while (firstSetIterator.hasNext()) {
 				String nameInFirstFile = firstSetIterator.next();
 				if ((nameInFirstFile.startsWith(firstName) && nameInFirstFile
 						.endsWith(lastName))) {
-					list.add(nameInFirstFile);
+					partiallyMatchedData.add(nameInFirstFile);
 				}
 			}
 
 		}
 
-		return list;
+		return partiallyMatchedData;
 	}
 
-	public Set<String> readFile(String path, Set<String> fileContent) {
+	public Set<String> readFile(String path) {
+		
+		Set<String> fileContent = new HashSet<String>();
 
 		try (BufferedReader br = new BufferedReader(new FileReader(path))) {
 
