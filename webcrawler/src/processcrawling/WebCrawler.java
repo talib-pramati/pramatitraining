@@ -2,22 +2,21 @@ package processcrawling;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import org.jsoup.nodes.Element;
 
 public class WebCrawler implements WebCrwalerInterface{
 	
 	private final Set<String> visitedLinks= new HashSet<String>();
 	private final Queue<String> uniqueExtractedURLS = new ConcurrentLinkedQueue<String>();
 	
-	private final Queue<String> pagesContainingNoLink = new ConcurrentLinkedQueue<String>();
+	private final Queue<String> pageContainsNoLink = new ConcurrentLinkedQueue<String>();
 	
 	private final HandleFile handleFile = new HandleFile();
 	private ExecutorService executor;
@@ -34,8 +33,8 @@ public class WebCrawler implements WebCrwalerInterface{
 		return uniqueExtractedURLS;
 	}
 
-	public Queue<String> getPagesContainingNoLink() {
-		return pagesContainingNoLink;
+	public Queue<String> getPageContainsNoLink() {
+		return pageContainsNoLink;
 	}
 
 	public ExecutorService getExecutor() {
@@ -83,8 +82,13 @@ public class WebCrawler implements WebCrwalerInterface{
 
 	@Override
 	public Boolean isContainsURL(String url) {
-		// TODO Auto-generated method stub
-		return visitedLinks.contains(url);
+		
+		boolean linkVisited = false;
+		synchronized (visitedLinks) {
+			
+			linkVisited = visitedLinks.contains(url);
+		}
+		return linkVisited;
 	}
 	
 	public Set<String> getVisitedLinks()
@@ -94,7 +98,7 @@ public class WebCrawler implements WebCrwalerInterface{
 
 	public void shutDownExecutorService()
 	{
-		if(uniqueExtractedURLS.isEmpty() && pagesContainingNoLink.isEmpty())
+		if(uniqueExtractedURLS.isEmpty() && pageContainsNoLink.isEmpty())
 		{
 			List<Runnable> shutdownNow = executor.shutdownNow();
 			Iterator<Runnable> iterator = shutdownNow.iterator();
@@ -104,6 +108,16 @@ public class WebCrawler implements WebCrwalerInterface{
 				System.out.println("This thread class running" + iterator.next().getClass());
 			}
 		}
+	}
+	public void enqueue(Element element) {	
+		
+			if(!isContainsURL(element.attr("abs:href"))){
+		getUniqueExtractedURLS().offer(element.attr("abs:href"));
+		visitedLinks.add(element.attr("abs:href"));
+		newLinkExtractorThread();
+		
+		}
+		
 	}
 
 }

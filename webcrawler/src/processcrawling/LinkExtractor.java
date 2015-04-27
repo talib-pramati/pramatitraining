@@ -23,8 +23,10 @@ public class LinkExtractor implements Runnable{
 		
 		if(!webCrawler.getUniqueExtractedURLS().isEmpty()){
 			
-			System.out.println("link size = "+ webCrawler.getUniqueExtractedURLS().size());
-			System.out.println("mail size = "+ webCrawler.getPagesContainingNoLink().size());
+			/*System.out.println("queue size = "+ webCrawler.getUniqueExtractedURLS().size());
+			System.out.println("mail size = "+ webCrawler.getPageContainsNoLink().size());
+			System.out.println("visitedlink size = "+ webCrawler.getVisitedLinks().size());
+			*/
 			String url = webCrawler.getUniqueExtractedURLS().poll();
 			try {
 				
@@ -44,32 +46,24 @@ public class LinkExtractor implements Runnable{
 		
 		
 		Document document = Jsoup.connect(url).get();
-		Elements urls = document.select("a[href]");
+		Elements urls = document.select("a[href*=2014]");
 		webCrawler.getVisitedLinks().add(url);
 		
 		if(urls.isEmpty())
 		{
-			System.out.println("Calling link extractor...");
-			webCrawler.getPagesContainingNoLink().offer(url);
+			webCrawler.getPageContainsNoLink().offer(url);
 			webCrawler.startTextExtractorThread();
 			
 		}
 		
 		else
 		{	for(Element element:urls)
-			{
-				if(!webCrawler.isContainsURL(element.toString()))
-				{
-					webCrawler.getUniqueExtractedURLS().offer(element.attr("abs:href"));
-					webCrawler.newLinkExtractorThread();
-				}
+			{							
+				webCrawler.enqueue(element);
 					
 			}
-		}
-		
-		webCrawler.getVisitedLinks().add(url);
-		//webCrawler.newLinkExtractorThread();
-		
+		}		
+				
 	}
 
 }

@@ -10,14 +10,14 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Random;
 
-import constantclassess.ConstantClass;
+import constantclassess.CrawlerConstants;
 
 public class HandleFile implements HandleFileInterface{
 
 	@Override
 	public File creataeFile() throws IOException {
 		
-		File dir = new File(ConstantClass.DIRECTORY_NAME);
+		File dir = new File(CrawlerConstants.DIRECTORY_NAME);
 		
 		if(!dir.exists())
 		{
@@ -39,14 +39,14 @@ public class HandleFile implements HandleFileInterface{
 	@Override
 	public String generateUniqueFileName() {
 		
-		String DATE_FORMAT= ConstantClass.DATE_FORMAT;
+		String DATE_FORMAT= CrawlerConstants.DATE_FORMAT;
 		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(DATE_FORMAT);
 		String todaysFormattedDate = sdf.format(new Date());
 		
 		Random random = new Random();
 		int nextInt = random.nextInt(9999);
 		
-		String uniqueName = todaysFormattedDate + nextInt + ConstantClass.EXTENSION;
+		String uniqueName = todaysFormattedDate + nextInt + CrawlerConstants.EXTENSION;
 		
 		return uniqueName;
 		
@@ -55,7 +55,7 @@ public class HandleFile implements HandleFileInterface{
 	@Override
 	public void writeIntoFile(File fileName, String text) {
 		
-		Charset charset = Charset.forName(ConstantClass.CHAR_SET);
+		Charset charset = Charset.forName(CrawlerConstants.CHAR_SET);
 		Path path = Paths.get(fileName.getAbsolutePath());
 		try(BufferedWriter writer = Files.newBufferedWriter(path, charset))
 		{

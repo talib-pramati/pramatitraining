@@ -1,6 +1,6 @@
 package constantclassess;
 
-public class ConstantClass {
+public class CrawlerConstants {
 	
 	public static String SITE = "http://mail-archives.apache.org/mod_mbox/maven-users/";
 	public static int MAXIMUM_THREADS = 200;

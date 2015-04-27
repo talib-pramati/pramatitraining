@@ -1,16 +1,16 @@
 package startcrawler;
 
 import processcrawling.WebCrawler;
-import constantclassess.ConstantClass;
+import constantclassess.CrawlerConstants;
 
 public class StartCrawler {
 	
 	
 	public static void main(String[] args)
 	{
-		WebCrawler webCrawler = new WebCrawler(ConstantClass.SITE,ConstantClass.MAXIMUM_THREADS);
+		WebCrawler webCrawler = new WebCrawler(CrawlerConstants.SITE,CrawlerConstants.MAXIMUM_THREADS);
 		webCrawler.startCrawling();
-		webCrawler.shutDownExecutorService();
+		//webCrawler.shutDownExecutorService();
 	}
 
 }

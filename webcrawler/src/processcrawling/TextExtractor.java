@@ -21,27 +21,24 @@ public class TextExtractor implements Runnable{
 	@Override
 	public void run()
 	{
-		if(!webCrawler.getPagesContainingNoLink().isEmpty())
+		if(!webCrawler.getPageContainsNoLink().isEmpty())
 		{
 			
-			int size = webCrawler.getPagesContainingNoLink().size();			
-			System.out.println("size = "+ size);
-			
-			System.out.println("Inside text extractor...");
-			
-			String url = webCrawler.getPagesContainingNoLink().poll();
+			int size = webCrawler.getPageContainsNoLink().size();			
+			String url = webCrawler.getPageContainsNoLink().poll();
+			 Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 				try {
 					
 					Document doc = Jsoup.connect(url).get();
 					Element text = doc.body();
-					System.out.println(text.text());
 					saveMail(text.text());
 				} catch (IOException e) {
 				
 					System.out.println("This mail could not saved");
+					e.printStackTrace();
 			}
 				
-				webCrawler.newTextExtractorThread();
+			webCrawler.newTextExtractorThread();
 			
 		}
 		
