@@ -12,64 +12,60 @@ import java.util.Random;
 
 import constantclassess.CrawlerConstants;
 
-public class HandleFile implements HandleFileInterface{
+public class FileManager implements FileManagerInterface {
 
 	@Override
 	public File creataeFile() throws IOException {
-		
+
 		File dir = new File(CrawlerConstants.DIRECTORY_NAME);
-		
-		if(!dir.exists())
-		{
+
+		if (!dir.exists()) {
 			dir.mkdir();
 		}
-		
-		File filename = new File(dir,generateUniqueFileName());
-		
-		if(!filename.exists())
-		{
+
+		File filename = new File(dir, generateUniqueFileName());
+
+		if (!filename.exists()) {
 			filename.createNewFile();
 		}
-		
-		
+
 		return filename;
-		
+
 	}
 
 	@Override
 	public String generateUniqueFileName() {
-		
-		String DATE_FORMAT= CrawlerConstants.DATE_FORMAT;
-		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(DATE_FORMAT);
+
+		String DATE_FORMAT = CrawlerConstants.DATE_FORMAT;
+		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(
+				DATE_FORMAT);
 		String todaysFormattedDate = sdf.format(new Date());
-		
+
 		Random random = new Random();
 		int nextInt = random.nextInt(9999);
-		
-		String uniqueName = todaysFormattedDate + nextInt + CrawlerConstants.EXTENSION;
-		
+
+		String uniqueName = todaysFormattedDate + nextInt
+				+ CrawlerConstants.EXTENSION;
+
 		return uniqueName;
-		
+
 	}
 
 	@Override
 	public void writeIntoFile(File fileName, String text) {
-		
+
 		Charset charset = Charset.forName(CrawlerConstants.CHAR_SET);
 		Path path = Paths.get(fileName.getAbsolutePath());
-		try(BufferedWriter writer = Files.newBufferedWriter(path, charset))
-		{
+		try (BufferedWriter writer = Files.newBufferedWriter(path, charset)) {
 			writer.write(text, 0, text.length());
 		}
-		
-		catch(Exception exc)
-		{
-			System.out.println("Could not write into the file " + fileName.getAbsolutePath());
+
+		catch (Exception exc) {
+			System.out.println("Could not write into the file "
+					+ fileName.getAbsolutePath());
 			exc.printStackTrace();
-		}	
-		
-		
-		
+		}
+
 	}
 
 }

@@ -10,7 +10,6 @@ public class StartCrawler {
 	{
 		WebCrawler webCrawler = new WebCrawler(CrawlerConstants.SITE,CrawlerConstants.MAXIMUM_THREADS);
 		webCrawler.startCrawling();
-		//webCrawler.shutDownExecutorService();
 	}
 
 }

@@ -11,26 +11,38 @@ import java.util.concurrent.Executors;
 
 import org.jsoup.nodes.Element;
 
-public class WebCrawler implements WebCrwalerInterface{
-	
-	private final Set<String> visitedLinks= new HashSet<String>();
-	private final Queue<String> uniqueExtractedURLS = new ConcurrentLinkedQueue<String>();
-	
+public class WebCrawler implements WebCrwalerInterface {
+
+	/*
+	 * visitedLinks maintains a group of unique url which is extracted from the
+	 * different pages.
+	 */
+	private final Set<String> visitedLinks = new HashSet<String>();
+
+	/*
+	 * urls which are extracted from a web page and not present in visitedLinks
+	 * would be enqued here.
+	 */
+	private final Queue<String> queContainsUniqueURL = new ConcurrentLinkedQueue<String>();
+
+	/*
+	 * This queue maintains url of the page which does not contain further
+	 * reference or href.
+	 */
 	private final Queue<String> pageContainsNoLink = new ConcurrentLinkedQueue<String>();
-	
-	private final HandleFile handleFile = new HandleFile();
+
+	private final FileManager handleFile = new FileManager();
 	private ExecutorService executor;
 	private String url;
-	
-	
-	public WebCrawler(String startingURL, int maximum_threads)
-	{
+
+	public WebCrawler(String startingURL, int maximum_threads) {
 		this.url = startingURL;
 		executor = Executors.newFixedThreadPool(maximum_threads);
-		
+
 	}
-	public Queue<String> getUniqueExtractedURLS() {
-		return uniqueExtractedURLS;
+
+	public Queue<String> getQueContainsUniqueURL() {
+		return queContainsUniqueURL;
 	}
 
 	public Queue<String> getPageContainsNoLink() {
@@ -41,83 +53,75 @@ public class WebCrawler implements WebCrwalerInterface{
 		return executor;
 	}
 
-	
-	public void startCrawling()
-	{
-		uniqueExtractedURLS.offer(url);
-		startLinkExtractorThread();
+	public void startCrawling() {
+		queContainsUniqueURL.offer(url);
+		startLinkDownloaderThread();
 	}
-	
-	
-	
+
 	@Override
-	public void newLinkExtractorThread() {
-		
-		startLinkExtractorThread();
-		
+	public void startNewLinkDownloaderThread() {
+
+		startLinkDownloaderThread();
+
 	}
-	
+
 	@Override
-	public void newTextExtractorThread(){
-		
-		startTextExtractorThread();
+	public void startNewMailTextDownloaderThread() {
+
+		startMailTextDownloaderThread();
 	}
-	
-	public void startLinkExtractorThread()
-	{
-		
-		executor.execute(new LinkExtractor(this));
+
+	public void startLinkDownloaderThread() {
+
+		executor.execute(new LinkDownloader(this));
 	}
-	
-	public void startTextExtractorThread()
-	{
-		executor.execute(new TextExtractor(this,handleFile));
+
+	public void startMailTextDownloaderThread() {
+		executor.execute(new MailTextDownloader(this, handleFile));
 	}
 
 	@Override
 	public void addVisitedLinks(String url) {
-		
+
 		visitedLinks.add(url);
 	}
 
 	@Override
 	public Boolean isContainsURL(String url) {
-		
+
 		boolean linkVisited = false;
 		synchronized (visitedLinks) {
-			
+
 			linkVisited = visitedLinks.contains(url);
 		}
 		return linkVisited;
 	}
-	
-	public Set<String> getVisitedLinks()
-	{
+
+	public Set<String> getVisitedLinks() {
 		return this.visitedLinks;
 	}
 
-	public void shutDownExecutorService()
-	{
-		if(uniqueExtractedURLS.isEmpty() && pageContainsNoLink.isEmpty())
-		{
+	public void shutDownExecutorService() {
+		if (queContainsUniqueURL.isEmpty() && pageContainsNoLink.isEmpty()) {
 			List<Runnable> shutdownNow = executor.shutdownNow();
 			Iterator<Runnable> iterator = shutdownNow.iterator();
-			
-			while(iterator.hasNext())
-			{
-				System.out.println("This thread class running" + iterator.next().getClass());
+
+			while (iterator.hasNext()) {
+				System.out.println("This thread class running"
+						+ iterator.next().getClass());
 			}
 		}
 	}
-	public void enqueue(Element element) {	
-		
-			if(!isContainsURL(element.attr("abs:href"))){
-		getUniqueExtractedURLS().offer(element.attr("abs:href"));
-		visitedLinks.add(element.attr("abs:href"));
-		newLinkExtractorThread();
-		
+
+	public void enqueue(Element element) {
+
+		if (!isContainsURL(element.attr("abs:href"))) {
+			getQueContainsUniqueURL().offer(element.attr("abs:href"));
+			visitedLinks.add(element.attr("abs:href"));
+			startNewLinkDownloaderThread();
+
 		}
-		
+
 	}
 
 }
